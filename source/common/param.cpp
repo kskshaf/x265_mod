@@ -590,6 +590,37 @@ int x265_param_default_preset(x265_param* param, const char* preset, const char*
             param->lookaheadSlices = 0; // disabled for best quality
             param->limitTU = 4;
         }
+        else if (!strcmp(preset,"slowxx"))
+        {
+            param->limitReferences = 3;
+            param->bEnableEarlySkip = 0;
+            param->rdoqLevel = 2;
+            param->psyRdoq = 1.0;
+            param->subpelRefine = 3;
+            param->searchMethod = X265_STAR_SEARCH;
+            param->maxNumReferences = 4;
+            param->lookaheadSlices = 4;
+            // based on preset slow
+
+            param->rc.aqMode=1;
+            param->rc.aqStrength=0.8;
+            param->maxCUSize=32;
+            param->rc.qCompress=0.7;
+            param->rc.pbFactor=1.2;
+            param->bEnableSAO=0;
+            param->bEnableRectInter=0;
+            param->bEnableStrongIntraSmoothing=0;
+            param->bIntraInBFrames=1;
+            param->bEnableWeightedBiPred=1;
+            param->deblockingFilterBetaOffset=-1;
+            param->deblockingFilterTCOffset=-1;
+            param->lookaheadDepth=80;
+            param->bOpenGOP=0;
+            param->limitModes=0;
+            param->bframes=8;
+            param->rdLevel=6;
+            param->rc.rfConstant=14;
+        }
         else if (!strcmp(preset, "veryslow"))
         {
             param->bEnableEarlySkip = 0;
@@ -753,6 +784,174 @@ int x265_param_default_preset(x265_param* param, const char* preset, const char*
                     param->searchRange = 38; //down from 57
                 }
             }
+        }
+        else if (!strncmp(tune,"f",1)) //get faster
+        {
+            param->searchMethod=X265_HEX_SEARCH;
+            param->subpelRefine=2;
+            if(!strncmp(tune,"ff",2))
+            {
+                param->bEnableEarlySkip=1;
+            }
+            if(!strncmp(tune,"fff",3))
+            {
+                param->bEnableEarlySkip=0;
+                param->rdLevel=4;
+            }
+            if(!strncmp(tune,"ffff",4))
+            {
+                param->bframes=4;
+            }
+            if(!strncmp(tune,"fffff",5))
+            {
+                param->bEnableFastIntra=1;
+            }
+            if(!strncmp(tune,"ffffff",6))
+            {
+                param->bIntraInBFrames=0;
+                param->bEnableWeightedBiPred=0;
+            }
+            if(!strncmp(tune,"fffffff",7))
+            {
+                param->bEnableWeightedPred=0;
+            }
+            // not really recommend to go further down
+            if(!strncmp(tune,"ffffffff",8))
+            {
+                param->recursionSkipMode=2;
+            }
+            if(!strncmp(tune,"fffffffff",9))
+            {
+                param->bEnableEarlySkip=1;
+            }
+            if(!strncmp(tune,"ffffffffff",10))
+            {
+                param->lookaheadSlices=8;
+            }
+            if(!strncmp(tune,"fffffffffff",11))
+            {
+                param->bFrameAdaptive=0;
+            }
+            if(!strncmp(tune,"ffffffffffff",12))
+            {
+                param->recursionSkipMode=1;
+            }
+            if(!strncmp(tune,"fffffffffffff",13))
+            {
+                param->searchMethod=X265_DIA_SEARCH;
+                param->bEnableSignHiding=0;
+                param->bEnableTemporalMvp=0;
+            }
+            if(!strncmp(tune,"ffffffffffffff",14))
+            {
+                param->rc.aqMode=X265_AQ_NONE;
+            }
+            if(!strncmp(tune,"fffffffffffffff",15))
+            {
+                param->rdoqLevel=0;
+                param->psyRdoq=0;
+            }
+            if(!strncmp(tune,"ffffffffffffffff",16))
+            {
+                param->maxNumReferences=1;
+                param->limitReferences=0;
+            }
+            if(!strncmp(tune,"fffffffffffffffff",17))
+            {
+                param->rdLevel=2;
+            }
+            if(!strncmp(tune,"ffffffffffffffffff",18))
+            {
+                param->minCUSize=16;
+            }
+        }
+        else if (!strncmp(tune,"e",1)) //get slower (enhance!)
+        {
+            param->tuQTMaxInterDepth=3;
+            param->tuQTMaxIntraDepth=3;
+            param->limitTU=4;
+            if(!strncmp(tune,"ee",2))
+            {
+                param->maxNumMergeCand=5;
+            }
+            if(!strncmp(tune,"eee",3))
+            {
+                param->limitTU=0;
+            }
+            // you can stop here
+            if(!strncmp(tune,"eeee",4))
+            {
+                param->maxNumReferences=5;
+            }
+            if(!strncmp(tune,"eeeee",5))
+            {
+                param->limitReferences=0;
+            }
+            if(!strncmp(tune,"eeeeee",6))
+            {
+                param->bframes=16;
+            }
+            if(!strncmp(tune,"eeeeeee",7))
+            {
+                param->subpelRefine=4;
+            }
+            if(!strncmp(tune,"eeeeeeee",8))
+            {
+                param->recursionSkipMode=0;
+            }
+            if(!strncmp(tune,"eeeeeeeee",9))
+            {
+                param->lookaheadSlices=0;
+            }
+            if(!strncmp(tune,"eeeeeeeeee",10))
+            {
+                param->bAllowNonConformance=1; /* 3.5+2 had the limit 6 but now it's 8, 
+                for compatibility this param is added here rather than ref=16 down there*/
+                param->maxNumReferences=8;
+            }
+            if(!strncmp(tune,"eeeeeeeeeee",11))
+            {
+                param->subpelRefine=7;
+            }
+            if(!strncmp(tune,"eeeeeeeeeeee",12))
+            {
+                param->maxNumReferences=16;
+            }
+            if(!strncmp(tune,"eeeeeeeeeeeee",13)) // evil=true, this is by design.
+            {
+                param->frameNumThreads=1;
+            }
+        }
+        else if (!strncmp(tune,"vq",2)) //vmaf quality
+        {
+            std::string tune_s=tune;
+            int vq_lvl=1;
+            if (tune_s.length()>2)
+            {
+                vq_lvl=std::stoi(tune_s.substr(2));
+            }
+
+            switch (vq_lvl)
+            {
+                case 3:
+                    param->bEnableHME=1;
+                    param->hmeSearchMethod[0]=param->hmeSearchMethod[2]=X265_STAR_SEARCH;
+                    param->hmeSearchMethod[1]=X265_UMH_SEARCH;
+                    param->lookaheadSlices=0;
+                case 2:
+                    param->maxCUSize=64;
+                    param->rc.qgSize=64;
+                case 1:
+                    param->tuQTMaxInterDepth=2;
+                    param->tuQTMaxIntraDepth=2;
+                    param->bframes=3; /*Contrary to popular belief, people,
+                    (too many) bframes is not good for your anime.  (at least in x265:)
+                    https://i.imgur.com/7yxvMqr.jpg */
+            }
+        }
+        else if (!strcmp(tune,"none"))
+        {
+            // do nothing. no why.
         }
         else if (!strcmp(tune, "vmaf"))  /*Adding vmaf for x265 + SVT-HEVC integration support*/
         {

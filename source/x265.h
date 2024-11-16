@@ -2418,7 +2418,7 @@ int x265_param_apply_profile(x265_param *, const char *profile);
  *      (either can be NULL, which implies no preset or no tune, respectively)
  *
  *      Currently available presets are, ordered from fastest to slowest: */
-static const char * const x265_preset_names[] = { "ultrafast", "superfast", "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow", "placebo", 0 };
+static const char * const x265_preset_names[] = { "ultrafast", "superfast", "veryfast", "faster", "fast", "medium", "slow", "slower", "slowxx", "veryslow", "placebo", 0 };
 
 /*      The presets can also be indexed numerically, as in:
  *      x265_param_default_preset( &param, "3", ... )
@@ -2430,7 +2430,7 @@ static const char * const x265_preset_names[] = { "ultrafast", "superfast", "ver
  *      100 times faster than placebo!
  *
  *      Currently available tunings are: */
-static const char * const x265_tune_names[] = { "psnr", "ssim", "grain", "zerolatency", "fastdecode", "animation", "littlepox", "vcb-s", 0 };
+static const char * const x265_tune_names[] = { "psnr", "ssim", "grain", "zerolatency", "fastdecode", "animation", "littlepox", "vcb-s", "f~ffffffffffffffffff(18)", "e~eeeeeeeeeeeee(13)", "vq", 0 };
 
 /*      returns 0 on success, negative on failure (e.g. invalid preset/tune name). */
 int x265_param_default_preset(x265_param *, const char *preset, const char *tune);
