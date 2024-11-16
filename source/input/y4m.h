@@ -55,6 +55,8 @@ protected:
 
     int colorSpace;
 
+    int frameCount;
+
     bool alphaAvailable;
 
     bool threadActive;
@@ -85,6 +87,9 @@ public:
     int getWidth() const                          { return width; }
 
     int getHeight() const                         { return height; }
+
+    template <typename T>
+    int readNumber(T &out);
 };
 }
 
