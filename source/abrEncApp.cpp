@@ -1171,7 +1171,7 @@ ret:
             {
                 x265_picture* dest = (m_parentEnc->m_param->numViews > 1) ? m_parentEnc->m_parent->m_inputPicBuffer[view][writeIdx] : m_parentEnc->m_parent->m_inputPicBuffer[m_id][writeIdx];
                 src->format = m_parentEnc->m_param->format;
-                if (m_input[view]->readPicture(*src))
+                if (m_input[view]->readPicture(*src) && !b_ctrl_c)
                 {
                     dest->poc = src->poc;
                     dest->pts = src->pts;
