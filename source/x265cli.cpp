@@ -111,6 +111,8 @@ namespace X265_NS {
         H0("                                 ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, or placebo\n");
         H0("-t/--tune <string>               Tune the settings for a particular type of source or situation:\n");
         H0("                                 psnr, ssim, grain, zerolatency, fastdecode\n");
+        H0("                                 (mid bitrate anime) littlepox/lp, (slower) littlepox++/lp++,\n");
+        H0("                                 (high bitrate anime BD / film) vcb-s/vcbs,   (slower) vcb-s++/vcbs++,\n");
         H0("\nQuad-Tree size and depth:\n");
         H0("-s/--ctu <64|32|16>              Maximum CU size (WxH). Default %d\n", param->maxCUSize);
         H0("   --min-cu-size <64|32|16|8>    Minimum CU size (WxH). Default %d\n", param->minCUSize);
@@ -1004,6 +1006,10 @@ namespace X265_NS {
 
         for (int view = 0; view < param->numViews - !!param->format; view++)
             this->input[view]->startReader();
+
+        if (!preset) preset = "medium";
+        if (!tune) tune = "none";
+        x265_log(param, X265_LOG_INFO, "Using preset %s & tune %s\n", preset, tune);
 
         if (reconfn[0])
         {
