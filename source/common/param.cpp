@@ -158,6 +158,7 @@ void x265_param_default(x265_param* param)
     param->bLogCuStats = 0;
     param->decodedPictureHashSEI = 0;
     param->opts = 3;
+    param->bStylish = 0;
 
     /* Quality Measurement Metrics */
     param->bEnablePsnr = 0;
@@ -1578,6 +1579,7 @@ int x265_param_parse(x265_param* p, const char* name, const char* value)
     {
         if (0) ;
         OPT("opts") p->opts = atoi(value);
+        OPT("stylish") p->bStylish = atobool(value);
         OPT("csv") snprintf(p->csvfn, X265_MAX_STRING_SIZE, "%s", value);
         OPT("csv-log-level") p->csvLogLevel = atoi(value);
         OPT("qpmin") p->rc.qpMin = atoi(value);
