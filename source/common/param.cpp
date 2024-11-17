@@ -29,6 +29,7 @@
 #include "cpu.h"
 #include "x265.h"
 #include "svt.h"
+#include <string>
 
 #if _MSC_VER
 #pragma warning(disable: 4996) // POSIX functions are just fine, thanks
@@ -156,6 +157,7 @@ void x265_param_default(x265_param* param)
     param->rc.lambdaFileName[0] = 0;
     param->bLogCuStats = 0;
     param->decodedPictureHashSEI = 0;
+    param->opts = 3;
 
     /* Quality Measurement Metrics */
     param->bEnablePsnr = 0;
@@ -1575,6 +1577,7 @@ int x265_param_parse(x265_param* p, const char* name, const char* value)
     if (bExtraParams)
     {
         if (0) ;
+        OPT("opts") p->opts = atoi(value);
         OPT("csv") snprintf(p->csvfn, X265_MAX_STRING_SIZE, "%s", value);
         OPT("csv-log-level") p->csvLogLevel = atoi(value);
         OPT("qpmin") p->rc.qpMin = atoi(value);
@@ -2479,6 +2482,9 @@ char *x265_param2string(x265_param* p, int padx, int pady)
 #define BOOL(param, cliopt) \
     s += snprintf(s, bufSize - (s - buf), " %s", (param) ? cliopt : "no-" cliopt);
 
+    if ((p->opts & 2) == 0)
+        return buf;
+
     s += snprintf(s, bufSize - (s - buf), "cpuid=%d", p->cpuid);
     s += snprintf(s, bufSize - (s - buf), " frame-threads=%d", p->frameNumThreads);
     if (strlen(p->numaPools))
@@ -3256,6 +3262,7 @@ void x265_copy_params(x265_param* dst, x265_param* src)
     dst->confWinRightOffset = src->confWinRightOffset;
     dst->confWinBottomOffset = src->confWinBottomOffset;
     dst->bliveVBV2pass = src->bliveVBV2pass;
+    dst->opts = src->opts;
 #if ENABLE_ALPHA
     dst->bEnableAlpha = src->bEnableAlpha;
     dst->numScalableLayers = src->numScalableLayers;

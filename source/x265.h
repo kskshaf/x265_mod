@@ -1678,13 +1678,15 @@ typedef struct x265_param
 	 * alternative transfer characteristics SEI message (see. D.2.38 and D.3.38 of
 	 * JCTVC-W1005 http://phenix.it-sudparis.eu/jct/doc_end_user/documents/23_San%20Diego/wg11/JCTVC-W1005-v4.zip
 	 * */
-	int       preferredTransferCharacteristics;
+    int       preferredTransferCharacteristics;
 	
 	/*
 	 * Specifies the value for the pic_struc syntax element of the picture timing SEI message (See D2.3 and D3.3)
 	 * of the HEVC spec. for a detailed explanation
 	 * */
-	int       pictureStructure;	
+    int       pictureStructure;
+
+    int opts;
 
     struct
     {
