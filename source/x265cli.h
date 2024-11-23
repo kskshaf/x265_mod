@@ -433,7 +433,9 @@ static const struct option long_options[] =
         int64_t prevUpdateTime;
 
         int argCnt;
+        char** orgArgv;
         char** argString;
+        char *stringPool;
 
         /* ABR ladder settings */
         bool isAbrLadderConfig;
@@ -483,6 +485,9 @@ static const struct option long_options[] =
             saveLevel = 0;
             numRefs = 0;
             argCnt = 0;
+            orgArgv = NULL;
+            argString = NULL;
+            stringPool = NULL;
         }
 
         void destroy();
