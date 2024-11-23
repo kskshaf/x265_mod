@@ -1,5 +1,5 @@
 # x265 HEVC Encoder
-## A modified x265 that keeping up with upstream (maybe?)
+## A modified x265 version that keeping up with upstream (maybe?)
 
 ---
 ### Amend base
