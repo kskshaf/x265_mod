@@ -2599,7 +2599,7 @@ char *x265_param2string(x265_param* p, int padx, int pady)
     BOOL(p->bOpenGOP, "open-gop");
     BOOL(p->bEnableWavefront, "wpp");
 
-    s += snprintf(s, bufSize - (s - buf), "cpuid=%d", p->cpuid);
+    s += snprintf(s, bufSize - (s - buf), " cpuid=%d", p->cpuid);
     s += snprintf(s, bufSize - (s - buf), " frame-threads=%d", p->frameNumThreads);
     if (strlen(p->numaPools))
         s += snprintf(s, bufSize - (s - buf), " numa-pools=%s", p->numaPools);
